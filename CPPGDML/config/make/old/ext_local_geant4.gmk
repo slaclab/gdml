@@ -1,0 +1,66 @@
+
+# -*-Makefile-*-
+# Geant4
+# example of local instalation
+
+ifndef GEANT4_INCLUDED
+GEANT4_INCLUDED := 1
+
+ifdef REQUIRE_GEANT4
+
+GEANT4_SET         := 0
+
+ifeq ($(strip $(REQUIRE_GEANT4)),any)
+ # Default Geant4 version
+ GEANT4_BASE        := $(SITE_EXTSW_BASE)/geant4/7.0.p01/$(PLATFORM)
+ GEANT4_INCLUDE     := $(GEANT4_BASE)/../share/include
+ GEANT4_LIBDIR      := $(GEANT4_BASE)/lib
+ GEANT4_SET         := 1
+else
+ ifeq ($(strip $(REQUIRE_GEANT4)),7.0.p01)
+  GEANT4_BASE        := $(SITE_EXTSW_BASE)/geant4/7.0.p01/$(PLATFORM)
+  GEANT4_INCLUDE     := $(GEANT4_BASE)/../share/include
+  GEANT4_LIBDIR      := $(GEANT4_BASE)/lib
+  GEANT4_SET         := 1
+ endif
+endif
+
+ifeq ($(GEANT4_SET),1)
+ # Update preprocessor & compiler flags
+ PROJECT_INCLUDES   += -I$(GEANT4_INCLUDE)
+
+ # Update linker flags
+ PROJECT_LINK_FLAGS += -L$(GEANT4_LIBDIR) \
+		-lG4readout \
+		-lG4run \
+		-lG4event \
+		-lG4tracking \
+	     	-lG4parmodels \
+		-lG4processes \
+		-lG4digits_hits \
+		-lG4track \
+		-lG4particles \
+		-lG4geometry \
+		-lG4materials \
+		-lG4graphics_reps \
+		-lG4intercoms \
+		-lG4global
+
+ # Update run-time library path
+ ifeq ($(strip $(LD_LIBRARY_PATH)),)
+  LD_LIBRARY_PATH := $(GEANT4_LIBDIR)
+ else
+  LD_LIBRARY_PATH := $(LD_LIBRARY_PATH):$(GEANT4_LIBDIR)
+ endif
+
+else
+ $(error Wrong version of Geant4 specified!)
+endif
+
+endif
+
+.PHONY: g4p
+g4p:
+	echo "GEANT4 SET: $(GEANT4_SET)"
+
+endif

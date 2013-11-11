@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+  <gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:gdml="http://cern.ch/2001/Schemas/GDML" 
+  xsi:noNamespaceSchemaLocation="../../../GDMLSchema/gdml.xsd">
+
+    <define>
+        <position name="XBoxPos" x="050"/>
+        <position name="YBoxPos" y="100"/>
+        <position name="ZBoxPos" z="150"/>
+        <position name="DiamondPos" x="100" y="0"/>
+        <rotation name="DiamondRot" z="30" unit="deg"/>
+        <scale name="DiamondScl" x="-1" y="+1" z="+1"/>
+    </define>
+
+    <materials>
+      <material Z="1.0" name="AIR">
+        <D value="1e-25"/>
+        <atom value="1.00794"/>
+      </material>
+      <material name="ALU" Z="13.0">
+        <D value="2.70"/>
+	<atom value="26.98"/>
+      </material>
+    </materials>
+
+    <solids>
+      <box y="200" x="200" lunit="cm" z="200" name="WorldBox"/>
+      <box name="XBox" x="100" y="005" z="005"/>
+      <box name="YBox" x="005" y="200" z="005"/>
+      <box name="ZBox" x="005" y="005" z="300"/>
+      <box name="OBox" x="005" y="005" z="005"/>
+      <xtru name="Extruded">
+        <twoDimVertex x="0" y="0"/>
+        <twoDimVertex x="100" y="0"/>
+        <twoDimVertex x="0" y="200"/>
+        <section zOrder="0" zPosition="000" xOffset="0" yOffset="0" scalingFactor="1.0"/>
+        <section zOrder="1" zPosition="200" xOffset="0" yOffset="0" scalingFactor="0.5"/>
+      </xtru>
+    </solids>
+
+    <structure>
+
+      <volume name="VXBox">
+        <materialref ref="ALU"/>
+	<solidref ref="XBox"/>
+      </volume>
+      <volume name="VYBox">
+        <materialref ref="ALU"/>
+	<solidref ref="YBox"/>
+      </volume>
+      <volume name="VZBox">
+        <materialref ref="ALU"/>
+	<solidref ref="ZBox"/>
+      </volume>
+
+      <volume name="VCross">
+        <materialref ref="ALU"/>
+	<solidref ref="OBox"/>
+        <physvol>
+          <volumeref ref="VXBox"/>
+          <positionref ref="XBoxPos"/>
+	</physvol>
+        <physvol>
+          <volumeref ref="VYBox"/>
+          <positionref ref="YBoxPos"/>
+	</physvol>
+        <physvol>
+          <volumeref ref="VZBox"/>
+          <positionref ref="ZBoxPos"/>
+	</physvol>
+      </volume>
+
+      <volume name="VExtruded">
+        <materialref ref="ALU"/>
+	<solidref ref="Extruded"/>
+      </volume>
+
+      <volume name="VDiamond">
+        <materialref ref="ALU"/>
+        <solidref ref="Extruded"/>
+        <physvol>
+          <volumeref ref="VExtruded"/>
+          <scale name="ScalePPP" x="+1" y="+1" z="+1"/>
+        </physvol>
+        <physvol>
+          <volumeref ref="VExtruded"/>
+          <scale name="ScaleNPP" x="-1" y="+1" z="+1"/>
+        </physvol>
+        <physvol>
+          <volumeref ref="VExtruded"/>
+          <scale name="ScalePNP" x="+1" y="-1" z="+1"/>
+        </physvol>
+        <physvol>
+          <volumeref ref="VExtruded"/>
+          <scale name="ScalePPN" x="+1" y="+1" z="-1"/>
+        </physvol>
+        <physvol>
+          <volumeref ref="VExtruded"/>
+          <scale name="ScaleNNP" x="-1" y="-1" z="+1"/>
+        </physvol>
+        <physvol>
+          <volumeref ref="VExtruded"/>
+          <scale name="ScalePNN" x="+1" y="-1" z="-1"/>
+        </physvol>
+        <physvol>
+          <volumeref ref="VExtruded"/>
+          <scale name="ScaleNPN" x="-1" y="+1" z="-1"/>
+        </physvol>
+        <physvol>
+          <volumeref ref="VExtruded"/>
+          <scale name="ScaleNNN" x="-1" y="-1" z="-1"/>
+        </physvol>
+      </volume>
+
+      <volume name="VMother">
+        <materialref ref="ALU"/>
+        <solidref ref="WorldBox"/>
+        <physvol>
+          <volumeref ref="VDiamond"/>
+          <positionref ref="DiamondPos"/>
+          <rotationref ref="DiamondRot"/>
+          <scaleref ref="DiamondScl"/>
+        </physvol>
+      </volume>
+
+      <volume name="TOP">
+        <materialref ref="AIR"/>
+        <solidref ref="WorldBox"/>
+        <physvol>
+          <volumeref ref="VCross"/>
+        </physvol>
+        <physvol>
+          <volumeref ref="VMother"/>
+          <scaleref ref="DiamondScl"/>
+        </physvol>
+      </volume>
+
+    </structure>
+
+    <setup version="1.0" name="Default">
+      <world ref="TOP"/>
+    </setup>
+
+  </gdml>

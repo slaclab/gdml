@@ -1,0 +1,88 @@
+/\/\/\/\/\ GDML README /\/\/\/\/\
+
+This is the README for the C++ version of the 
+Geometry Description Markup Language (GDML) package
+with a binding to Geant4.
+
+/\/\/\/\/\ Configuration and Build /\/\/\/\/\
+
+Building GDML requires gcc/g++ and make (preferably gmake).
+
+NOTE: Cygwin does not have the 'gmake' command so use plain 'make' instead.
+
+To build CPPGDML for the first time:
+
+	./GDMLSetup
+
+To rebuild GDML:
+
+	make
+
+To reinstall the libraries in the specific place (optional):
+
+	make install
+
+The default installation directory is /usr/local, and this is
+settable using the --prefix option.
+
+To get a list of options:
+
+	./configure --help
+
+If you setup the following variables in the environment before
+building, configure will (probably) run successfully without any 
+options:
+
+	G4INSTALL
+	CLHEP_BASE_DIR
+	XERCESCROOT
+
+It would also be a good idea to source your Geant4 setup script 
+before configuring, if you have one.  This is an example
+in bash:
+
+	source $G4INSTALL/.config/bin/$G4SYSTEM/env.sh 
+
+This script sets the correct Geant4 environment for Granular 
+or Global libs and for Visualization and User Interface settings,
+which GDML's configuration system should pickup correctly
+without any options. 
+
+Example configurations can be found in SLACConfigure.sh and CERNConfigure.csh .
+
+/\/\/\/\/\ Platforms /\/\/\/\/\
+
+Currently supported operating systems are:
+
+	Linux
+	Darwin/OSX
+	Cygwin
+
+g++ and ia32 are currently the only supported compilers.
+
+/\/\/\/\/\ WWW Information /\/\/\/\/\
+
+Savannah Project:
+
+	https://savannah.cern.ch/projects/gdml/
+
+Project Homepage:
+
+	http://gdml.web.cern.ch/GDML/
+
+Online CVS Repository (GDML2):
+
+	http://simu.cvs.cern.ch/cgi-bin/simu.cgi/simu/GDML2/
+
+Mailing List:
+
+	project-lcg-peb-simu-gdml@cern.ch
+
+/\/\/\/\/\ Reporting Bugs /\/\/\/\/\
+
+GDML bugs can be reported using CERN Savannah:
+
+  https://savannah.cern.ch/bugs/?group=gdml
+
+Any problems specific to the build and configuration system 
+can be sent to <jeremym@slac.stanford.edu>.

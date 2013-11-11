@@ -1,0 +1,43 @@
+Example g4N02gdml
+----------------
+
+A simple example demonstrating the usage of GDML writer to export the
+Geant4 geometry in the form of the GDML file.
+
+The geometry is instanciated using the standard
+UserDetectorConstruction class (DetectorConstruction) and then
+exported to GDML.
+
+The only GDML-specific part of the code is in the main (g4N02gdml)
+file where the G4GDMLWriter is instanciated (giving the name of the
+output file and the location of the schema as arguments) and the
+DumpGeometryInfo method (with the pointer to the top volume as
+argument) is called.  
+
+The procedure is a standard way of exporting the geometry in GDML and
+can be used directly within the user code. The only necessary element
+is that the Geant4 geometry is fully instanciated in memory and that
+the pointer to the top volume is available.
+
+The example is built automatically while building all the GDML
+libraries (by the make file in CPPGDML directory).
+
+
+*******************************************************************
+TO RUN THE EXAMPLE....
+*******************************************************************
+
+Set the environment variables like PATH and LD_LIBRARY_PATH correctly.
+
+../setup.csh has been generated automatically. source this script to 
+set the above environment variables automatically.
+
+Then use the command: 
+
+g4N02gdml
+
+(using the default file test.gdml)
+
+OR..
+
+g4N02gdml [filename]

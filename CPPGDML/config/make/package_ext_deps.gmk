@@ -1,0 +1,3 @@
+include $(PROJECT_CONFIG)/ext/geant4.gmk
+include $(PROJECT_CONFIG)/ext/clhep.gmk
+include $(PROJECT_CONFIG)/ext/xercesc.gmk

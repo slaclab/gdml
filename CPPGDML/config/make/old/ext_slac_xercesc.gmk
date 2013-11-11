@@ -1,0 +1,57 @@
+
+# -*-Makefile-*-
+# Apache Xerces-C
+# example of local instalation
+
+$(echo included ext_slac_xerces.gmk)
+
+ifndef XERCESC_INCLUDED
+XERCESC_INCLUDED := 1
+
+ifdef REQUIRE_XERCESC
+
+XERCESC_SET         := 0
+
+ifeq ($(strip $(REQUIRE_XERCESC)),any)
+ # Default Xerces-C version
+ XERCESC_BASE        := $(XERCESCROOT)  
+ XERCESC_INCLUDE     := $(XERCESCROOT)/include
+ XERCESC_LIBDIR      := $(XERCESC_BASE)/lib
+ XERCESC_SET         := 1
+  $(echo $(XERCESC_BASE) $(XERCESC_INCLUDE) $(XERCESC_LIBDIR) )
+else
+ $(error "Specific Xerces version not supported.") 
+endif
+
+ifeq ($(XERCESC_SET),1)
+ # Update preprocessor & compiler flags
+ PROJECT_INCLUDES   += -I$(XERCESC_INCLUDE)
+
+ # Update linker flags
+PROJECT_LINK_FLAGS += -L$(XERCESC_LIBDIR)
+ifeq ($(findstring CYGWIN,$(PLATFORM)),CYGWIN)
+ PROJECT_LINK_FLAGS += -lxerces-c.dll -lxerces-depdom.dll
+else
+ PROJECT_LINK_FLAGS += -lxerces-c
+endif
+
+
+ # Update run-time library path
+ ifeq ($(strip $(LD_LIBRARY_PATH)),)
+  LD_LIBRARY_PATH := $(XERCESC_LIBDIR)
+ else
+  LD_LIBRARY_PATH := $(LD_LIBRARY_PATH):$(XERCESC_LIBDIR)
+ endif
+
+else
+ $(error Wrong version of Xerces-C specified!)
+endif
+
+endif
+
+.PHONY: xcp
+xcp:
+	echo "XERCESC SET: $(XERCESC_SET)"
+
+endif
+

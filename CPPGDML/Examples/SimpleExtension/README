@@ -1,0 +1,120 @@
+----Simple GDML Extension Example----
+
+This example shows how to extend the GDML package to include a custom element
+within the volume tag.  A G4VisAttributes object will be created from a color
+tag that is assigned to the volume element using a colorref with type of
+ReferenceType, similar to how the existing solidref and materialref elements
+are processed.
+
+A Geant4 application requires three user initialization classes: a physics list,
+a generator, and a detector construction.  The physics list and generator are
+copied from the GDML example g4gogdml.  The detector construction will use
+the GDML infrastructure, such as the SAXProcessor, by adding processors and
+subscribers for custom elements.  The GDML processing engine does not need
+to be modified or extended to support custom elements.  It simply needs to
+have the custom processing components registered with it before parsing
+the XML input file.
+
+The first step in extending GDML is to redefine the GDML schema to include the
+custom elements of the extension application and extend base GDML types by 
+adding additional, usually optional, content.  The SimpleExtension application's
+schema is found in SimpleExtensionSchema/SimpleExtension.xsd.  
+
+The GDML schema is imported from its local, relative location within the GDML CVS
+directory.  Within the redefine element, the extension schema can modify existing 
+GDML elements by adding additional content.
+
+    <xs:redefine schemaLocation="../../../GDMLSchema/gdml.xsd">
+  
+GDML's VolumeType is extended by adding a colorref element that will reference 
+a color object by its ID.
+
+    <xs:extension base="VolumeType">
+        <xs:sequence>
+	    <xs:element minOccurs="0" maxOccurs="1" name="colorref" type="ReferenceType"/>
+        </xs:sequence>
+    </xs:extension>  
+
+The color element referenced by the colorref will define red, green, blue, and alpha (RGBA) 
+values to set the volume's display color.  These color elements are contained in a colors 
+container element that will precede the gdml element.
+
+The layout of our extension format is as follows.
+
+    <gdml_simple_extension>
+        <colors>
+            <color name="aColor" R="1.0" G="0.0" B="0.0"/>
+        </colors>
+        <gdml>
+        <!--required GDML elements go here!-->
+        <structure>
+            <volume>
+                <materialref ref="someMaterial"/>
+                <solidref ref="someSolid"/> 
+                <colorref ref="aColor"/>
+            </volume>
+        </structure>
+    </gdml_simple_extension>    
+
+Because GDML is a based on the SAX format, certain restrictions apply to how the GDML format can
+be extended.  Unlike HTML, the order of definitions does matter in a GDML file.  So the colors
+container cannot come after the gdml block.  The color elements need to be defined before they
+are referenced.
+
+In an XML file of the extended format, the noNamespaceSchemaLocation attribute of the top-level 
+container element should point to the location of the extension schema.  The test.gdml file 
+references the copy of the extension schema relative to the directory Examples/SimpleExtension
+within the SimpleExtensionSchema directory.
+
+    <gdml_simple_extension xmlns:gdml_simple_extension="http://www.example.org"
+                           xmlns:xs="http://www.w3.org/2001/XMLSchema-instance"          
+                           xs:noNamespaceSchemaLocation="./SimpleExtensionSchema/SimpleExtension.xsd"> 
+
+Once the GDML format has been extended using XML schema, the extension application needs to 
+define the necessary processes and subscribers that will convert the XML into runtime objects.
+The color element has a colorProcess that instantiates a simple SAX object called color
+containing string values for name and RGBA.  There is also a corresponding colorSubscriber 
+that converts these generic color objects into G4VisAttributes objects, which is the Geant4 runtime 
+class containing visualization information for each G4LogicalVolume.  The extension application 
+should have its own processor for registering its custom objects; the SimpleExtension example
+has a SimpleExtensionProcessor where pointers to each G4VisAttributes object are stored by name
+into an STL map.
+
+Now that the color objects are converted into Geant4 runtime objects with the colorSubscriber, 
+the volume must be linked with its corresponding G4VisAttributes object.  A volumeExtendedSubscriber
+processes the contents of volume and finds the colorref tag in the volumes child elements.  The 
+G4VisAttributes object is retrieved from the SimpleExtensionProcessor using the ref attribute and 
+assigned to the G4LogicalVolume that was created by GDML's volumeSubscriber.
+
+The extension application must register its custom processes and subscribers with the GDMLParser.  
+These components are instantiated within the SimpleExtensionLibLoad function in the SimpleExtensionLibLoad.cpp 
+file using the LOAD_COMPONENT macro.
+
+    LOAD_COMPONENT(colorProcess);
+    LOAD_COMPONENT(colorrefProcess);
+    LOAD_COMPONENT(colorSubscriber);    
+    LOAD_COMPONENT(volumeExtendedSubscriber);
+
+The SimpleExtensionLibLoad function is called in DetectorConstruction after the SAXProcessor has been initialized.  
+This registers the custom handlers with the GDML processing engine.
+
+*******************************************************************
+TO RUN THE EXAMPLE....
+*******************************************************************
+
+Set the environment variables like PATH and LD_LIBRARY_PATH correctly.
+
+../setup.csh has been generated automatically. source this script to 
+set the above environment variables automatically.
+
+Then use the command: 
+
+SimpleExtension 
+
+(using the default file test.gdml)
+
+OR..
+
+SimpleExtension [filename]
+
+--Jeremy McCormick <jeremym@slac.stanford.edu>

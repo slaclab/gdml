@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<gdml xmlns:gdml="http://cern.ch/2001/Schemas/GDML" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../GDMLSchema/gdml.xsd" >
+ <define>
+   <position name="detp0" unit="mm"  x="300.0"  y="300.0"   z="300.0" />
+   <position name="detp1" unit="mm"  x="300.0"  y="300.0"   z="-300.0" />
+   <position name="detp2" unit="mm"  x="300.0"  y="-300.0"  z="300.0" />
+   <position name="detp3" unit="mm"  x="300.0"  y="-300.0"  z="-300.0" />
+   <position name="detp4" unit="mm"  x="-300.0" y="300.0"   z="300.0" />
+   <position name="detp5" unit="mm"  x="-300.0" y="300.0"   z="-300.0" />
+   <position name="detp6" unit="mm"  x="-300.0" y="-300.0"  z="300.0" />
+   <position name="detp7" unit="mm"  x="-300.0" y="-300.0"  z="-300.0" />
+   <variable name="x" value="20"/>
+ </define>
+ <materials>
+  <element Z="7" formula="N" name="Nitrogen" >
+   <atom value="14.01" />
+  </element>
+  <element Z="8" formula="O" name="Oxygen" >
+   <atom value="16" />
+  </element>
+  <material formula=" " name="Air" >
+   <D value="0.00129" />
+   <fraction n="0.7" ref="Nitrogen" />
+   <fraction n="0.3" ref="Oxygen" />
+  </material>
+ </materials>
+ <solids>
+  <box aunit="deg" lunit="mm" name="detbox" x="100.0*x" y="100.0*x" z="100.0*x" />
+  <box aunit="deg" lunit="mm" name="detbox2" x="200.0*x" y="200.0*x" z="200.0*x" />  
+ </solids>
+ <structure>
+  <volume name="prova2">
+   <materialref ref="Air" />
+   <solidref ref="detbox2" />
+  </volume>
+  <volume name="DetBox" >
+   <materialref ref="Air" />
+   <solidref ref="detbox" />
+   <physvol>
+    <volumeref ref="prova2" />
+    <positionref ref="detp0" />
+   </physvol>
+   <physvol>
+    <file name="modular_second.gdml" />
+    <positionref ref="detp0" />
+   </physvol>
+   <physvol>
+    <file name="modular_second.gdml" />
+    <positionref ref="detp1" />
+   </physvol>
+   <physvol>
+    <file name="modular_second.gdml" />
+    <positionref ref="detp2" />
+   </physvol>
+   <physvol>
+    <file name="modular_second.gdml" />
+    <positionref ref="detp3" />
+   </physvol>
+   <physvol>
+    <file name="modular_second.gdml" />
+    <positionref ref="detp4" />
+   </physvol>
+   <physvol>
+    <file name="modular_second.gdml" />
+    <positionref ref="detp5" />
+   </physvol>
+   <physvol>
+    <file name="modular_second.gdml" />
+    <positionref ref="detp6" />
+   </physvol>
+   <physvol>
+    <file name="modular_second.gdml" />
+    <positionref ref="detp7" />
+   </physvol>
+  </volume>
+ </structure>
+ <setup name="Default" version="1.0" >
+  <world ref="DetBox" />
+ </setup>
+</gdml>

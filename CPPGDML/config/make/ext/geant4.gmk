@@ -1,0 +1,61 @@
+
+# -*-Makefile-*-
+# Geant4
+# example of local instalation
+
+ifndef GEANT4_INCLUDED
+GEANT4_INCLUDED := 1
+
+ifdef REQUIRE_GEANT4
+
+ifndef GEANT4_BASE
+  $(error GEANT4_BASE was not set)
+endif
+
+ifndef GEANT4_INCLUDE
+  GEANT4_INCLUDE := $(GEANT4_BASE)/include/Geant4
+endif
+
+ifndef GEANT4_LIBDIR
+  GEANT4_LIBDIR := $(GEANT4_BASE)/lib64
+endif
+
+GEANT4_SET := 1
+
+# Update preprocessor & compiler flags
+PROJECT_INCLUDES   += -I$(GEANT4_INCLUDE)
+
+# Include CLHEP headers
+PROJECT_INCLUDES += -I$(GEANT4_BASE)/source/externals/clhep/include
+
+# Geant4 config dir
+GEANT4_CONFIG := $(PROJECT_TOP)/config/make/ext
+
+# use granular?
+ifdef GEANT4_USE_GRANULAR
+  include $(GEANT4_CONFIG)/geant4_granular_libs.gmk
+# default to global
+else
+  include $(GEANT4_CONFIG)/geant4_global_libs.gmk
+endif
+
+# add Geant4 base lib dir to link flags
+LDFLAGS += -L$(GEANT4_LIBDIR)
+
+# add list of G4 libs
+LDFLAGS += $(GEANT4_LIBLIST)
+
+# Update run-time library path
+ifeq ($(strip $(LD_LIBRARY_PATH)),)
+  LD_LIBRARY_PATH := $(GEANT4_LIBDIR)
+else
+  LD_LIBRARY_PATH := $(LD_LIBRARY_PATH):$(GEANT4_LIBDIR)
+endif
+
+endif
+
+.PHONY: g4p
+g4p:
+	echo "GEANT4 SET: $(GEANT4_SET)"
+
+endif

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<gdml xmlns:gdml="http://cern.ch/2001/Schemas/GDML" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../GDMLSchema/gdml.xsd" >
+ <define>
+ </define>
+ <materials>
+  <element Z="7" formula="N" name="Nitrogen" >
+   <atom value="14.01" />
+  </element>
+  <element Z="8" formula="O" name="Oxygen" >
+   <atom value="16" />
+  </element>
+  <material formula=" " name="Air" >
+   <D value="0.00129" />
+   <fraction n="0.7" ref="Nitrogen" />
+   <fraction n="0.3" ref="Oxygen" />
+  </material>
+ </materials>
+ <solids>
+  <box aunit="deg" lunit="mm" name="box" x="100.0" y="100.0" z="100.0" />   
+ </solids>
+ <structure>
+  <volume name="Detector" >
+   <materialref ref="Air" />
+   <solidref ref="box" />
+  </volume>  
+ </structure>
+ <setup name="Default" version="1.0" >
+  <world ref="Detector" />
+ </setup>
+</gdml>

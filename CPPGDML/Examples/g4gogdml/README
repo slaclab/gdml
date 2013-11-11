@@ -1,0 +1,50 @@
+Example g4gogdml
+----------------
+
+A simple example demonstrating the usage of GDML file as the geometry
+source for a Geant4 application. 
+The only GDML-specific part of the code is in the
+UserDetectorConstruction class (gogdmlDetectorConstruction) where the
+GDML processor is instanciated and the geometry file is parsed. This
+is a standard way of using GDML for any Geant4 application and can be
+directly introduces into the user code.
+
+The example contains a few example GDML files:
+
+* geo.gdml - the simplest example, just one box in the world volume
+
+* split.gdml - same as geo.gdml, but using ENTITY to split the file in
+several pieces. The "materials" block is put in a separate file.
+
+* modular_main.gdml - example demonstrating the usage of modular GDML
+files. This file include modular_first.gdml, which includes
+modular_second.gdml
+
+* matricesandloops.gdml - example demonstrating usage of matrices and
+loops 
+
+* opticalsurfaces.gdml - example demonstrating the usage of optical
+surfaces and material properties sheets
+
+
+The example is built automatically while building all the GDML libraries
+(by the make file in CPPGDML directory).
+
+*******************************************************************
+TO RUN THE EXAMPLE....
+*******************************************************************
+
+Set the environment variables like PATH and LD_LIBRARY_PATH correctly.
+
+../setup.csh has been generated automatically. source this script to 
+set the above environment variables automatically.
+
+Then use the command: 
+
+g4gogdml
+
+(using the default file test.gdml)
+
+OR..
+
+g4gogdml [filename]

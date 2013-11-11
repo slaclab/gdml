@@ -1,0 +1,5 @@
+/control/verbose 2
+/run/verbose 1
+/tracking/verbose 1
+#/geometry/test/recursive_test
+/run/beamOn 20

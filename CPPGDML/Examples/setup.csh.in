@@ -1,0 +1,6 @@
+#!/bin/csh
+#
+
+setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:@XERCESC_LIBDIR@:@CLHEP_LIBDIR@:@GEANT4_LIBDIR@:@PWD@/build/@PLATFORM@/lib
+
+setenv PATH ${PATH}:@PWD@/build/@PLATFORM@/bin

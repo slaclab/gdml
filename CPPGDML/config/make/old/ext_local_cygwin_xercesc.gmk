@@ -1,0 +1,51 @@
+
+# -*-Makefile-*-
+# Apache Xerces-C
+
+ifndef XERCESC_INCLUDED
+XERCESC_INCLUDED := 1
+
+ifdef REQUIRE_XERCESC
+
+XERCESC_SET         := 0
+
+ifeq ($(strip $(REQUIRE_XERCESC)),any)
+ # Default Xerces-C version
+ XERCESC_BASE        := $(SITE_EXTSW_BASE)
+ XERCESC_INCLUDE     := $(XERCESC_BASE)/include
+ XERCESC_LIBDIR      := $(XERCESC_BASE)/lib
+ XERCESC_SET         := 1
+else
+ ifeq ($(strip $(REQUIRE_XERCESC)),2.5.0)
+  XERCESC_BASE        := $(SITE_EXTSW_BASE)
+  XERCESC_INCLUDE     := $(XERCESC_BASE)/include
+  XERCESC_LIBDIR      := $(XERCESC_BASE)/lib
+  XERCESC_SET         := 1
+ endif
+endif
+
+ifeq ($(XERCESC_SET),1)
+ # Update preprocessor & compiler flags
+ PROJECT_INCLUDES   += -I$(XERCESC_INCLUDE)
+
+ # Update linker flags
+ PROJECT_LINK_FLAGS += -L$(XERCESC_LIBDIR) -lxerces-c.dll
+
+ # Update run-time library path
+ ifeq ($(strip $(LD_LIBRARY_PATH)),)
+  LD_LIBRARY_PATH := $(XERCESC_LIBDIR)
+ else
+  LD_LIBRARY_PATH := $(LD_LIBRARY_PATH):$(XERCESC_LIBDIR)
+ endif
+
+else
+ $(error Wrong version of Xerces-C specified!)
+endif
+
+endif
+
+.PHONY: xcp
+xcp:
+	echo "XERCESC SET: $(XERCESC_SET)"
+
+endif

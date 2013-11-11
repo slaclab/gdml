@@ -1,0 +1,40 @@
+
+# -*-Makefile-*-
+# Apache Xerces-C
+# example of local instalation
+
+ifndef XERCESC_INCLUDED
+XERCESC_INCLUDED := 1
+
+ifdef REQUIRE_XERCESC
+
+#XERCESC_BASE        := $(HOST_XERCESC_BASE)
+#XERCESC_INCLUDE     := $(HOST_XERCESC_INCLUDE)
+#XERCESC_LIBDIR      := $(HOST_XERCESC_LIBDIR)
+XERCESC_SET         := 1
+
+ifeq ($(XERCESC_SET),1)
+ # Update preprocessor & compiler flags
+ PROJECT_INCLUDES   += -I$(XERCESC_INCLUDE)
+
+ # Update linker flags
+ PROJECT_LINK_FLAGS += -L$(XERCESC_LIBDIR) -lxercesc
+
+ # Update run-time library path
+ ifeq ($(strip $(LD_LIBRARY_PATH)),)
+  LD_LIBRARY_PATH := $(XERCESC_LIBDIR)
+ else
+  LD_LIBRARY_PATH := $(LD_LIBRARY_PATH):$(XERCESC_LIBDIR)
+ endif
+
+else
+ $(error Wrong version of Xerces-C specified!)
+endif
+
+endif
+
+.PHONY: xcp
+xcp:
+	echo "XERCESC SET: $(XERCESC_SET)"
+
+endif

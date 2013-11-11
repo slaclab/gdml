@@ -1,0 +1,38 @@
+# -*-Makefile-*-
+# $Id: SuSE_9.2_gcc334_settings.gmk,v 1.1.1.1 2010-07-13 15:18:49 jeremy Exp $
+
+# Novell SuSE 9.2 GCC 3.3.4 C/C++ settings
+
+# Parameters defined elsewhere
+#
+# SITE_LIB_PREFIX - (optional) site dependent lib prefix
+#
+
+# GCC C++ compiler flags
+CXXFLAGS                      += -D_GNU_SOURCE -pipe -ansi -pedantic -W -Wall \
+                                 -Wno-non-virtual-dtor -Wno-long-long \
+                                 -Wwrite-strings -Wpointer-arith \
+                                 -Woverloaded-virtual -ftemplate-depth-256 \
+                                 -pthread -fmessage-length=0 \
+                                 -O2 -g1
+
+ifdef SITE_LIB_PREFIX
+PLATFORM_LIB_PREFIX           := lib$(SITE_LIB_PREFIX)
+PLATFORM_SHLIB_PREFIX         := lib$(SITE_LIB_PREFIX)
+else
+PLATFORM_LIB_PREFIX           := lib
+PLATFORM_SHLIB_PREFIX         := lib
+endif
+
+PLATFORM_LIB_SUFFIX           := .a
+PLATFORM_SHLIB_SUFFIX         := .so
+
+# Shared library linker flags
+PLATFORM_SHLIB_FLAGS          := -Wl,-E -shared
+
+# Executable linker flags
+PLATFORM_EXE_SHLIB_FLAGS      := -Wl,-E
+
+# Shared libraries are supported on this platform
+PLATFORM_SUPPORTS_SHARED_LIBS := 1
+

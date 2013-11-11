@@ -1,0 +1,13 @@
+ifndef PROJECT_INCLUDED
+
+PROJECT_INCLUDED := 1
+
+# From the top GNUmakefile, PROJECT_TOP is the current directory.
+ifndef PROJECT_TOP
+  PROJECT_TOP = $(CURDIR)
+endif
+
+PROJECT_CONFIG     := $(PROJECT_TOP)/config/make
+PROJECT_BUILD_AREA := $(PROJECT_TOP)/build
+
+endif

@@ -1,0 +1,52 @@
+# -*-Makefile-*-
+# clhep
+# example of local instalation
+
+$(echo included ext_slac_clhep.gmk)
+
+ifndef CLHEP_INCLUDED
+CLHEP_INCLUDED := 1
+
+ifdef REQUIRE_CLHEP
+
+CLHEP_SET         := 0
+
+ifeq ($(strip $(REQUIRE_CLHEP)),any)
+ # Default clhep version
+ CLHEP_BASE        := $(CLHEP_BASE_DIR)
+ CLHEP_INCLUDE     := $(CLHEP_BASE)/include
+ CLHEP_LIBDIR      := $(CLHEP_BASE)/lib
+ CLHEP_SET         := 1
+ 
+ $(echo CLHEP: base=$(CLHEP_BASE_DIR) includedir=$(CLHEP_BASE)/include libdir$(CLHEP_BASE)/lib )
+
+else
+  $(error "Specific CLHEP version not supported.")
+endif
+
+ifeq ($(CLHEP_SET),1)
+ # Update preprocessor & compiler flags
+ PROJECT_INCLUDES   += -I$(CLHEP_INCLUDE)
+
+ # Update linker flags
+ PROJECT_LINK_FLAGS += -L$(CLHEP_LIBDIR) -lclhep
+
+ # Update run-time library path
+ ifeq ($(strip $(LD_LIBRARY_PATH)),)
+  LD_LIBRARY_PATH := $(CLHEP_LIBDIR)
+ else
+  LD_LIBRARY_PATH := $(LD_LIBRARY_PATH):$(CLHEP_LIBDIR)
+ endif
+
+else
+ $(error Wrong version of clhep specified!)
+endif
+
+endif
+
+.PHONY: clp
+clp:
+	echo "CLHEP SET: $(CLHEP_SET)"
+
+endif
+

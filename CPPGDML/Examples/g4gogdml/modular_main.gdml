@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<gdml xmlns:gdml="http://cern.ch/2001/Schemas/GDML" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../GDMLSchema/gdml.xsd" >
+ <define>
+   <variable name="x" value="1"/>
+ </define>
+ <materials>
+  <element Z="7" formula="N" name="Nitrogen" >
+   <atom value="14.01" />
+  </element>
+  <element Z="8" formula="O" name="Oxygen" >
+   <atom value="16" />
+  </element>
+  <material formula=" " name="Air" >
+   <D value="0.00129" />
+   <fraction n="0.7" ref="Nitrogen" />
+   <fraction n="0.3" ref="Oxygen" />
+  </material>
+ </materials>
+ <solids>
+  <box aunit="deg" lunit="mm" name="world" x="10000.0" y="10000.0" z="10000.0" />
+ </solids>
+ <structure>
+  <volume name="World" >
+   <materialref ref="Air" />
+   <solidref ref="world" />
+   <physvol>
+    <file name="modular_first.gdml" volname="prova2"/>
+    <position name="DBP0" unit="mm"  x="3000.0*x"  y="3000.0*x"   z="3000.0*x" />
+   </physvol>
+   <physvol>
+    <file name="modular_first.gdml" volname="prova2"/>
+    <position name="DBP1" unit="mm"  x="3000.0*x"  y="3000.0*x"   z="-3000.0*x" />
+   </physvol>
+   <physvol>
+    <file name="modular_first.gdml" volname="prova2"/>
+    <position name="DBP2" unit="mm"  x="3000.0*x"  y="-3000.0*x"  z="3000.0*x" />
+   </physvol>
+   <physvol>
+    <file name="modular_first.gdml" volname="prova2"/>
+    <position name="DBP3" unit="mm"  x="3000.0*x"  y="-3000.0*x"  z="-3000.0*x" />
+   </physvol>
+   <physvol>
+    <file name="modular_first.gdml" volname="prova2"/>
+    <position name="DBP4" unit="mm"  x="-3000.0*x" y="3000.0*x"   z="3000.0*x" />
+   </physvol>
+   <physvol>
+    <file name="modular_first.gdml" volname="prova2"/>
+    <position name="DBP5" unit="mm"  x="-3000.0*x" y="3000.0*x"   z="-3000.0*x" />
+   </physvol>
+   <physvol>
+    <file name="modular_first.gdml" volname="prova2"/>
+    <position name="DBP6" unit="mm"  x="-3000.0*x" y="-3000.0*x"  z="3000.0*x" />
+   </physvol>
+   <physvol>
+    <file name="modular_first.gdml" volname="prova2"/>
+    <position name="DBP7" unit="mm"  x="-3000.0*x" y="-3000.0*x"  z="-3000.0*x" />
+   </physvol>
+  </volume>
+ </structure>
+ <setup name="Default" version="1.0" >
+  <world ref="World" />
+ </setup>
+</gdml>

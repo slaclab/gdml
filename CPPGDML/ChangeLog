@@ -1,0 +1,377 @@
+2007-09-11 Zoltan Torzsok
+           * Scaling transformation added
+	   * Extruded solid added
+	   * Vertex referencing problem in tessellated solid is fixed
+2007-02-09 Ben Lloyd <ben.lloyd@cern.ch>
+        * config/make/ext/geant4_granular_libs.gmk: Update for Geant4 8.2
+        * Examples: Slight modification to README instructions.
+
+2007-02-08 Ben Lloyd <ben.lloyd@cern.ch>
+	* CPPGDML: new configure switch 'enable-flat-include' to allow flat structure copying of includes.
+
+2007-02-01 Ben Lloyd <ben.lloyd@cern.ch>
+	* CPPGDML: New Fresh build installation script added: GDMLSetup, automated generation of MyConfigure script
+
+2006-11-30 Jeremy McCormick <jeremym@slac.stanford.edu>
+    * CPPGDML: moved a few classes from G4Processer to G4Subscribers to fix static linking problem with granular libs
+    * CPPGDML: fixed broken build of static examples; static application target now uses absolute paths to the static libraries
+    * CPPGDML: added new switches for library configuration: 
+               'enable-shared-lib' is replaced by 'enable-shared';
+               'enable-static-lib' is replaced by 'enable-static';
+               'enable-granular' will make examples link to package libs;
+               'enable-single' will build a single GDML library and examples will link to it
+               The default is shared + static + single.  Use all four switches to get the configuration you want.
+    * CPPGDML: updated CERNConfigure.sh and SLACConfigure.sh with new switches
+    * CPPGDML: rewrote config/make/gdml_link_libs.gmk for setting of library configuration variables
+
+2006-11-28 Jeremy McCormick <jeremym@slac.stanford.edu>
+    * CPPGDML: trivial updates for CLHEP 2 compat
+
+2006-11-29 Ben Lloyd <ben.lloyd@cern.ch>
+	* CPPGDML: added support for the 'auxiliary' tag to be used in volumes
+
+2006-11-23 Ben Lloyd <ben.lloyd@cern.ch>
+	* CPPGDML: Physvol volumeref's within volume loops can now be any volume previously defined.
+	
+2006-09-05 Witek Pokorski <Witold.Pokorski@cern.ch>
+     *added support for material properties sheets
+
+2006-08-29 Daniele Francesco Kruse <k.master@fastwebnet.it>
+	* CPPGDML: added support for <variable>, <loop> & <matrix>
+
+2006-08-29 Witek Pokorski <Witold.Pokorski@cern.ch>
+     *added support for optical surfaces
+	
+2006-07-26 Daniele Francesco Kruse <k.master@fastwebnet.it>
+	* CPPGDML: added support for modularised GDML output
+
+2006-07-19 Ben Lloyd <ben.lloyd@cern.ch>
+	* CPPGDML: added support for G4TwistedBox, G4TwistedTrap, G4TwistedTubs & G4TwistedTrd
+
+2006-07-19 Daniele Francesco Kruse <k.master@fastwebnet.it>
+	* CPPGDML: added support for modularised GDML input
+
+2006-05-30 Witek Pokorski <Witold.Pokorski@cern.ch>
+	* CPPGDML: added support for G4TessellatedSolid and G4Tet 
+
+2006-03-29 Jeremy McCormick <jeremym@slac.stanford.edu>
+    * config/make/ext/geant4_ui_libs.gmk: Removed no-longer-used Geant4 UI settings
+    * config/make/ext/geant4_geant4_vis_libs.gmk: Removed no-longer-used Geant4 Vis settings
+    * config/make/ext/geant4_application.gmk: Removed duplicate gmk file (see geant4.gmk in same dir)
+    * config/make/ext/geant4_granular_libs.gmk: Deleted unused Geant4 granular libraries from list
+    * config/make/ext/geant4.gmk: Deleted UI and vis config section
+    * config/make/geant4_settings.gmk.in: Removed no-longer-used Geant4 settings file
+    * config/autoconf/geant4.m4: Added AC_DEFINE of G4LIB_USE_GRANULAR (moved from deleted geant4_settings.gmk.in)
+
+2006-03-28 Jeremy McCormick <jeremym@slac.stanford.edu>
+    * GNUmakefile: Added targets for creation of a single gdml library, e.g. on Linux "libgdml.a" or "libgdml.so"
+    * G4Binding/G4Evaluator: Moved GDMLExpressionEvaluator and GDMLDefineTable to this new package
+    * G4Binding/G4Processor: Removed evaluator code to new package (see above) 
+    * G4Binding/G4Subscribers: Removed explicit references to GDMLExpressionEvaluator header, where possible
+    * config/make/ext/geant4_application.gmk: Removed setting of Geant4 vis and UI options (probably should just remove this file)
+    * config/make/gdml_link_libs.gmk: Added G4Evaluator library to link libs
+    * Examples: Updated with new G4Evaluator dependency 
+
+2006-03-09 Witek Pokorski <Witold.Pokorski@cern.ch>
+	* CPPGDML: added support for division and reflections, improved support for replicas, added G4ellipsoid
+
+2005-11-04 Witek Pokorski <Witold.Pokorski@cern.ch>
+        * CPPGDML/Common/Writer: major bug corrected... we forgot to setprecision for the 
+	ostringstreams that we were using to convert doubles into std::strings... All the GDML files
+	generated so far had all the doubles truncated
+
+2005-11-23 Jeremy MCCORMICK <jeremym@slac.stanford.edu>
+
+        * config/autoconf/*.m4: Changed GDML macro prefix from GAC to GDML; Cleaned-up comments
+
+        * config/autoconf/geant4.m4: Added option --enable-nist/--disable-nist to configure; 
+        Sets the GDML_USE_NIST compile flag; Forced to disable if NIST not supported by Geant4 install
+
+        * G4Binding/G4Processor/src/MaterialLocator.h: Added utility to lookup materials and elements in G4 with optional NIST
+        * G4Binding/G4Processor/src/MaterialLocator.cpp: "
+
+        * G4Binding/G4Subscriber/src/materialSubscriber.cpp: Changed material lookup to use the MaterialLocator
+        * G4Binding/G4Subscriber/src/volumeSubscriber.cpp: Changed material lookup to use the MaterialLocator
+
+2005-11-04 Witek Pokorski <Witold.Pokorski@cern.ch>
+	* CPPGDML: further implementation of the handlig of replicas; support for replicas
+	both in the 'reader' as well as the 'writer'
+
+2005-06-09  Witek Pokorski <Witold.Pokorski@cern.ch>
+        * config/autoconf: the build system has been extended by an Autoconf front-end;
+	work done by Jeremy
+	* G4Subscribers: a simple utility method has been added Util::generateName 
+	which allows a non-trivial mapping of names (of volumes, solids, etc) used in GDML 
+	( which must be unique ) to the names used in G4 objects. This is useful in case 
+	of processing GDML files which where generated automatically (by GDMLWriter) and which 
+	had hexadecimal addresses appended to the names in order to guarantee uniqueness. 
+
+2005-03-02  Radovan CHYTRACEK  <radovan.chytracek@cern.ch>
+
+	* config/make/application.gmk: Added application builder makefile
+	* Examples/g4gogdml: Fixed makefile and wrong includes
+	* Examples/g4N02gdml: Fixed makefile and wrong includes
+	* GNUmakefile: Added examples build + fixed annoying missing
+	slash under project top
+	* other makefiles: Fixes due to slash
+	
+	
+2005-03-02  Radovan CHYTRACEK  <radovan.chytracek@cern.ch>
+
+	* CPPGDML/GNUmakefile: fixed to build again after CVS changes
+	* CPPGDML/config/make/package.gmk: fixed to build again after CVS
+	changes + added support for package unit tests
+	* CPPGDML/Common/Writer/tests: added Writer unit tests
+
+2004-11-29  Radovan CHYTRACEK  <radovan.chytracek@cern.ch>
+
+	* config/release/release.sh: Added first version of the release script
+
+2004-07-22  Radovan CHYTRACEK  <radovan.chytracek@cern.ch>
+
+	* Writer/src/StructureCursor.cpp: Fixed writing of position and
+        rotation refs
+	* Examples/g4N02gdml/GNUmakefile: Fixed missing G4modeling lib
+
+2004-07-19  Radovan CHYTRACEK  <radovan.chytracek@cern.ch>
+
+	* *.mk + config *.sh: GNU make config files for the build system moved
+        into $GDML_BASE/config/make directory
+	* all makefiles: Updated to reflect the move of make config files
+
+2004-06-19  Radovan CHYTRACEK  <radovan.chytracek@cern.ch>
+
+	* Writer/src/StructureCursor.cpp: 
+	* Writer/src/SolidsCursor.cpp: 
+	* Writer/src/Element.cpp: 
+	* Writer/src/DocumentBuilder.cpp: 
+	* Writer/src/Document.cpp: 
+	* Writer/Writer/StructureCursor.h: 
+	* Writer/Writer/MaterialsCursor.h: 
+	* Writer/Writer/Element.h: 
+	* Writer/Writer/EditableDocumentRegistry.h: 
+	* Writer/Writer/DocumentBuilder.h: 
+	* Writer/Writer/DefinitionsCursor.h: 
+	* Writer/Writer/Cursor.h: Updates due to finishing DocumentBuilder
+	cursors. Cleaned up includes of <string> file. Fixed missing
+	name() menthod in the Element class.
+
+	* Tests/DocumentBuilderWriter/DocumentBuilderWriter.cpp: Update
+	due to added StructureCursor and SetupCirsor classes.
+
+2004-06-18  Radovan CHYTRACEK  <radovan.chytracek@cern.ch>
+
+  * Fixed bug in creating of assembly volumes
+  * Added support for inlined positions and rotations in assembly volumes
+    This resolves GDML bug #3685 completely
+
+	* geant4/Subscribers/src/volumeSubscriber.cpp (Repository): Added
+	support for inlined position and rotation according to the versoin
+	1.1 of GDML Schema. Fixes partially GDML bug #3685.
+
+	* geant4/Subscribers/Subscribers/BooleanSolidTypeSubscriber.h
+	(Repository): Cosmetics
+
+	* Processes/src/rotationrefProcess.cpp (Repository): 
+	* Processes/src/positionrefProcess.cpp (Repository): Fixed
+	behavior according to the parent tag, see changes in the
+	ProcessingContext class
+
+	* Processes/Processes/SinglePlacementTypeProcess.h (Repository):
+	Update after changes into SinglePlacementType class
+
+	* Processes/src/childProcess.cpp (Repository): 
+	* Processes/src/unionProcess.cpp (Repository): 
+	* Processes/src/rotationProcess.cpp (Repository): 
+	* Processes/src/firstProcess.cpp (Repository): 
+	* Processes/Processes/ReferenceTypeProcess.h (Repository): 
+	* Processes/Processes/BooleanSolidTypeProcess.h (Repository): Cosmetics
+
+	* Schema/Schema/SinglePlacementType.h (Repository): Proper
+	implementation done now, still need to cleanup but along with
+	other refactoring
+
+	* Schema/Schema/ReferenceType.h (Repository): Fix to make
+	destructor virtual
+
+2004-06-17  Radovan CHYTRACEK  <radovan.chytracek@cern.ch>
+
+	* Schema/Schema/ContentGroup.h (Repository): Cleaned up virtual
+	inheritance 
+
+	* Schema/Schema/boolean_union.h (Repository):
+	* Schema/Schema/BooleanSolidType.h (Repository): Cosmetics
+
+	* Saxana/src/SAXProcessor.cpp (Repository): 
+	* Saxana/Saxana/SAXStateProcess.h (Repository): 
+	* Saxana/Saxana/SAXProcessor.h (Repository): 
+	* Saxana/Saxana/SAXObject.h (Repository): 
+	* Saxana/Saxana/ProcessingContext.h (Repository): Comments
+	cosmetics + added getter for parent processing context tag.
+
+	* Writer/src/SolidsCursor.cpp: 
+	* Writer/src/DocumentBuilder.cpp: 
+	* Writer/Writer/SolidsCursor.h: 
+	* Writer/Writer/DocumentBuilder.h: Finished SolidsCursor class
+	integration into DocumentBuilder.
+
+	* Writer/src/Document.cpp: Update for the GDML Schema 1.1.
+
+	* config/doxygen/gdml_doxy.cfg: Added the rest of source code
+	location in GDML project into doxygen generation. TODO: the update
+	of all coments into doxygen style.
+
+	* Tests/DocumentBuilderWriter/DocumentBuilderWriter.cpp: Update
+	due to added SolidsCursor.
+
+2004-06-16  Radovan CHYTRACEK  <radovan.chytracek@cern.ch>
+
+	* GDMLSchema/gdml_1.0.xsd (Repository): 
+	* GDMLSchema/gdml_simple_solids.xsd (Repository): Little
+	foramtting + changed the GDML Schema numbering to X.Y.Z, see the
+	gdml_1.0.xsd file for comments in version attribute of gdml tag.
+
+	* Saxana/src/SAXProcessor.cpp (Message): Upgrade to use SAX2 based
+	event gun which has much better error diagnostics and XML schema
+	support than the old SAX event gun.
+
+2004-06-15  U-PCRADOONE\rado  <radovan.chytracek@cern.ch>
+
+	* Writer/src/DocumentBuilder.cpp: 
+	* Writer/Writer/EditableDocument.h: Added forward call to document
+	allowing user defined location of the GDML schema file.
+
+	* Writer/src/Document.cpp: 
+	* Writer/Writer/Document.h: Added doxygen comments for all data
+	members and added GDML schema URL data member + its setter method.
+
+	* Writer/src/Element.cpp: Fixed overwriting of existing element
+	attribute via direct call to the std::maps operator [].
+
+	* Writer/src/MaterialsCursor.cpp: Fixed order of serialization for
+	the density tag to follow GDML schema order. It was causing
+	nothing saying error message from XercesC: "error: publicId:".
+
+	* Tests/DocumentBuilderWriter/DocumentBuilderWriter.cpp: Sets now
+	the GDML schema location so we can use the generated file with the
+	g4godml test without need to correct this.
+
+	* Saxana/src/SAXEventGun.cpp (Module): Schema validation changed
+	from Auto to Always for the time being. This will become user
+	configurable option in the future.
+
+	* Examples/g4gogdml/test.gdml (Module): Changed the name of the
+	default setup to "Default" to align it with the coming GDML writer
+	default generated setup name.
+
+2004-06-12  U-PCRADOONE\rado  <radovan.chytracek@cern.ch>
+
+	* Examples/g4gogdml/gogdmlDetectorConstruction.cpp (Module):
+	Changed the default setup name to "Default" as that name will be
+	generated by default if not given by a user.
+
+2004-06-12  Radovan CHYTRACEK  <radovan.chytracek@cern.ch>
+
+	* Tests/DocumentBuilderWriter/DocumentBuilderWriter.cpp
+	(Repository): Update due to new material + mixtures methods in
+	MaterialsCursor class.
+
+	* Writer/Writer/DocumentBuilder.h: Doxygen comments update and corrections.
+
+	* Writer/src/MaterialsCursor.cpp: 
+	* Writer/Writer/MaterialsCursor.h: Added material and material
+	mixture methods. 
+
+	* config/doxygen/gdml_doxy.cfg: Suppressed inlined source code,
+	tried examples code.
+
+	* cern_afs_setup.sh (Repository): Added docygen config.
+
+2004-06-11  Radovan CHYTRACEK  <radovan.chytracek@cern.ch>
+
+	* Tests/DocumentBuilderWriter/DocumentBuilderWriter.cpp
+	(Repository): Adapted to changes in DocumentBuilder interface.
+
+	* Writer/src/DocumentBuilder.cpp (Message): 
+	* Writer/Writer/DocumentBuilder.h (Message): Fixed tricky memory
+	leak reported by valgrind in the output stream initialization.
+	Changed interface to open. write, close and reset
+	methods. Semantics has changed as only constructor and write
+	methods now allow to define and/or redirect the output stream. Now
+	one document can be saved to many file just by repeated calls to
+	write with different output streams.
+
+	* Writer/src/Document.cpp: Fixed destructor and added suuport for indentation.
+
+	* Writer/src/DefinitionsCursor.cpp: Fixed ostringstream based
+	conversion of attribute values.
+
+	* Writer/src/Element.cpp: 
+	* Writer/Writer/Element.h: Added indentation support. 
+
+2004-06-07  Radovan CHYTRACEK  <radovan.chytracek@cern.ch>
+	* Writer/Element.h: Added attribute and content manipulation methods +
+	some diagnostics methods.
+	* Writer/Document.h: Added Document class representing a transient
+	model of GDML data before serializing into XML file.
+	* Tests/PureWriter/PureWriter.cpp: Added testing of the new
+	functionality in Element class + testign of Document class.
+
+2004-06-04  Radovan CHYTRACEK  <radovan.chytracek@cern.ch>
+
+	* Writer: Added code for the GDML Writer library. To be finshed soon.
+
+	* Tests/PureWriter: Added GDML writer test(s)
+
+	* libgdml.mk (Repository): Fixed testbin and bin target bad
+	dependencies w.r.t. the dependency files.
+	
+	* GNUmakefile (Repository): Added testbin target to build test
+	programs located in Tests directory.
+	
+	* cern_afs_setup.sh (Repository): Added setting the run-time PATH
+	env. variable
+
+2004-06-01  Radovan CHYTRACEK  <radovan.chytracek@cern.ch>
+	* check_platform.mk: Added makefile fragment checking for
+	operating system type and trying to deduce the default SCRAM_ARCH
+	value.
+	* libgdml.mk: Now conditionally check if platform has been
+	detected and if not so includes the check_platform.mk file above.
+	* GNUMakefile: all affected makefiles have been brought up tp date
+	due to changes in libgdml.mk.
+	* cygwin_local_setup.sh: The file has been populated by a sample
+	setup of my local machine where I have all the software needed to
+	build and run GDML processor and g4gogdml example. If someone
+	wants to play on Cygwin with GDML I highly recommend to have a
+	look at this file.
+	NOTE: This file will likely change in the future as Cygwin
+	platform is not well established in configuration management
+	system of LCG.
+
+2004-05-31  Radovan CHYTRACEK  <radovan.chytracek@cern.ch>
+	* GDML Schema files: moved into GDMLSchema directory and the old
+	directory schema remained empty.
+	* cern_afs_setup.sh: script updated to allow finer grained
+	configuration of the build process.
+	* GNUMakefiles: all the makefiles affected by changes in the
+	cern_afs_setup.sh have been brought up to date.
+	* setup.sh: removed
+	* G4VERSION: env. variable introduced and set to be default
+	pointing to the last rh73_gcc32 GEANT4 release(6.1.ref01). The
+	later releases will be or are already done by using the GCC 3.2.3
+	compiler version.
+
+2003-10-29  Radovan CHYTRACEK  <radovan.chytracek@cern.ch>
+
+	* geant4/Subscribers/GNUmakefile: 
+	* geant4/Processor/GNUmakefile: 
+	* Saxana/GNUmakefile (Repository): 
+	* Processes/GNUmakefile: Fixed reference to libgdml.mk
+	
+	* Examples/g4gogdml/GNUmakefile: In addition fix for SCRAM_ARCH
+	here too due to choosing the proper platform libraries for G4.
+
+	* libgdml.mk: Fixed library and binary rules, SCRAM_ARCH fix to
+	ensure only the suported one is set, renamed libgdml.gmk to libgdml.mk.A
+

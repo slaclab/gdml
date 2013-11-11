@@ -1,0 +1,26 @@
+##############################################################################
+# cmake configuration file for GDML
+#
+# GDML_INCLUDE_DIRS
+# GDML_LIBRARIES
+#
+# requires:
+#   MacroCheckPackageLibs.cmake for checking package libraries
+##############################################################################
+
+SET( GDML_DIR "@CMAKE_INSTALL_PREFIX@" )
+SET( GDML_VERSION "@GDML_VERSION@" )
+
+INCLUDE( "@ILCSOFT_CMAKE_MODULES_ROOT@/MacroCheckPackageLibs.cmake" )
+
+SET(GDML_INCLUDE_DIRS "@library_source_dirs@" )
+
+SET(GDML_LIBRARY gdml) 
+
+SET( GDML_LIBRARY_DIR "@GDML_LIB_INSTALL_DIR@" )
+
+INCLUDE( "${GDML_DIR}/lib/cmake/GDMLLibDeps.cmake" )
+
+INCLUDE( FindPackageHandleStandardArgs )
+
+FIND_PACKAGE_HANDLE_STANDARD_ARGS( GDML DEFAULT_MSG GDML_DIR GDML_INCLUDE_DIRS GDML_LIBRARY GDML_LIBRARY_DIR ${GDML_COMPONENT_VARIABLES} )

@@ -1,0 +1,49 @@
+# -*-Makefile-*-
+# Apache Xerces-C
+#
+# Generic setup using vars set by configure.
+ifndef XERCESC_INCLUDED
+XERCESC_INCLUDED := 1
+
+ifdef REQUIRE_XERCESC
+
+ifndef XERCESC_BASE
+  $(error XERCESC_BASE was not set)
+endif
+
+ifndef XERCESC_INCLUDE
+  $(error XERCESC_INCLUDE was not set)
+endif
+
+ifndef XERCESC_LIBDIR
+  $(error XERCESC_LIBDIR was not set)
+endif
+
+ifndef XERCESC_LIBNAME
+  $(error XERCESC_LIBNAME was not set)
+endif
+
+XERCESC_SET         := 1
+
+# Update preprocessor & compiler flags
+PROJECT_INCLUDES   += -I$(XERCESC_INCLUDE)
+
+# Update linker flags
+#PROJECT_LINK_FLAGS += -L$(XERCESC_LIBDIR) -l$(XERCESC_LIBNAME)
+LDFLAGS += -L$(XERCESC_LIBDIR) -l$(XERCESC_LIBNAME)
+#xercesc
+
+# Update run-time library path
+ifeq ($(strip $(LD_LIBRARY_PATH)),)
+  LD_LIBRARY_PATH := $(XERCESC_LIBDIR)
+else
+  LD_LIBRARY_PATH := $(LD_LIBRARY_PATH):$(XERCESC_LIBDIR)
+endif
+
+endif
+
+.PHONY: xcp
+xcp:
+	echo "XERCESC SET: $(XERCESC_SET)"
+
+endif
