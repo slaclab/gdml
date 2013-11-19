@@ -1,0 +1,145 @@
+# -*-Makefile-*-
+# $Id: application.gmk,v 1.1.1.1 2010/07/13 15:18:49 jeremy Exp $
+#
+# Application makefile fragment
+#
+# Application package should follow the following structure
+#
+# application_dir + header files
+#                 + source files
+#                 + main.cpp (the app main program)
+#
+# This makefile will build the executable with the application_dir name
+# under PROJECT_BUILD/application_dir itermmediate targets as .d and .o files
+# and application binary in PROJECT_BUILD/bin/application_dir(.exe)
+#
+# This makefile expects to be given the following variables
+#
+# PROJECT_TOP
+# PLATFORM
+# SUBSYSTEM
+# APP_NAME
+#
+# Additional PROJECT vars are derived from PROJECT_TOP by including $(PROJECT_TOP)/project.gmk.
+#
+
+# Setup package settings.
+include $(PROJECT_TOP)/config/make/project.gmk
+
+# Setup local settings.
+include $(PROJECT_CONFIG)/local_settings.gmk
+
+APP_DIR              := $(PROJECT_TOP)/$(SUBSYSTEM)/$(APP_NAME)
+APP_BUILD_AREA       := $(PROJECT_BUILD_AREA)/$(PLATFORM)/$(SUBSYSTEM)/$(APP_NAME)
+APP_TARGET           := $(PROJECT_BUILD_AREA)/$(PLATFORM)/bin/$(APP_NAME)$(PLATFORM_BIN_EXTENSION)
+APP_STATIC_TARGET    := $(PROJECT_BUILD_AREA)/$(PLATFORM)/bin/$(APP_NAME)_static$(PLATFORM_BIN_EXTENSION)
+
+APP_SOURCE_FILES     := $(notdir $(wildcard *.cpp))
+APP_OBJECT_FILES     := $(patsubst %.cpp,%.o,$(notdir $(wildcard *.cpp)))
+APP_DEPENDENCY_FILES := $(patsubst %.cpp,%.d,$(notdir $(wildcard *.cpp)))
+
+# Update the dependency & object files reflecting the build area location
+APP_DEPENDENCY_FILES := $(addprefix $(APP_BUILD_AREA)/,$(APP_DEPENDENCY_FILES))
+APP_OBJECT_FILES     := $(addprefix $(APP_BUILD_AREA)/,$(APP_OBJECT_FILES))
+
+PROJECT_INCLUDES         += -I$(APP_DIR)
+
+CPPFLAGS                 += $(PROJECT_INCLUDES)
+CXXFLAGS                 += $(PROJECT_INCLUDES)
+LDFLAGS                  += $(PROJECT_LINK_FLAGS)
+
+# package dependencies
+include $(PROJECT_CONFIG)/package_deps.gmk
+
+# This include sets up a number of variables that can be used for linking GDML.
+include $(PROJECT_CONFIG)/gdml_link_libs.gmk
+
+# Setup external dependencies.  This gmk includes them in correct order for static linking.
+include $(PROJECT_CONFIG)/application_ext_deps.gmk
+
+VPATH := $(PACKAGE_DIR) $(PACKAGE_BUILD_AREA)
+
+# Create the app_target based on lib flag settings.
+app_target := app_info
+
+ifdef GDML_USE_SHARED_LIB
+app_target += $(APP_TARGET)
+endif
+
+ifdef GDML_USE_STATIC_LIB
+app_target += $(APP_STATIC_TARGET)
+endif
+
+app_target += app_done
+
+$(APP_NAME)_target: $(app_target)
+
+# Static target.
+.PHONY: $(APP_STATIC_TARGET)
+$(APP_STATIC_TARGET): $(APP_DEPENDENCY_FILES) $(APP_OBJECT_FILES)
+	@echo
+	@echo "Building static appplication binary $@"
+	@echo	
+	@test -d $(PROJECT_TOP)/build/$(PLATFORM)/bin || mkdir -pv $(PROJECT_TOP)/build/$(PLATFORM)/bin
+	$(CXX) -o $@ $(APP_OBJECT_FILES) $(CXXFLAGS) $(GDML_STATIC_LDFLAGS) $(LDFLAGS)
+#	@echo GDML_STATIC_LDFLAGS=$(GDML_STATIC_LDFLAGS)
+#	$(CXX) -o $@ $(APP_OBJECT_FILES) $(CXXFLAGS) $(LDFLAGS)
+
+# Shared target.
+.PHONY: $(APP_TARGET)
+$(APP_TARGET): $(APP_DEPENDENCY_FILES) $(APP_OBJECT_FILES) 
+	@echo
+	@echo "Building shared application binary $@"
+	@echo
+	@test -d $(PROJECT_TOP)/build/$(PLATFORM)/bin || mkdir -pv $(PROJECT_TOP)/build/$(PLATFORM)/bin
+	$(CXX) -o $@ $(APP_OBJECT_FILES) $(CXXFLAGS) $(PLATFORM_EXE_SHLIB_FLAGS) $(GDML_SHARED_LDFLAGS) $(LDFLAGS)
+#	@echo GDML_SHARED_LDFLAGS=$(GDML_SHARED_LDFLAGS)
+#	$(CXX) -o $@ $(APP_OBJECT_FILES) $(CXXFLAGS) $(PLATFORM_EXE_SHLIB_FLAGS) $(LDFLAGS)
+
+.PHONY: app_info
+app_info:
+	@echo
+	@echo "Building application $(APP_NAME) for platform $(PLATFORM)"
+	@echo
+
+.PHONY: app_done
+app_done:
+	@echo
+	@echo "Application $(APP_NAME) built..."
+	@echo
+
+.PHONY: clean cleanall
+# Clean only binary targets objects and libs
+$(APP_NAME)_clean:
+	@echo
+	@echo "Cleaning application $(APP_NAME)"
+	@echo
+	@rm -f $(PROJECT_TOP)/build/$(PLATFORM)/bin/$(APP_NAME)
+	@rm -f $(APP_OBJECT_FILES)
+
+# Clean all including dependencies which will be rebuilt next time
+$(APP_NAME)_cleanall:
+	@echo
+	@echo "Cleaning all for app $(APP_NAME)"
+	@echo
+	@rm -f $(PROJECT_TOP)/build/$(PLATFORM)/bin/$(APP_NAME)
+	@rm -rf $(APP_BUILD_AREA)
+
+# Build app library dependency files
+$(APP_BUILD_AREA)/%.d: %.cpp
+	@test -d $(APP_BUILD_AREA) || mkdir -pv $(APP_BUILD_AREA)
+	@echo "Making dependencies for $(notdir $<)"
+	@$(SHELL) -ec \
+   '$(CXX) -MM $(CPPFLAGS) $(addprefix $(CURDIR)/,$(notdir $<)) | sed -e '\''s@\(.*\)\(\.o\)\([ :]*\)@$(APP_BUILD_AREA)/\1\2 $(APP_BUILD_AREA)/\1.d\3@g'\'' > $@'
+
+# Build app library object files from .cpp files
+$(APP_BUILD_AREA)/%.o: %.cpp
+	@test -d $(APP_BUILD_AREA) || mkdir -pv $(APP_BUILD_AREA)
+	@echo "Compiling $(notdir $<)"
+	@$(CXX) -c -o $@ $< $(CXXFLAGS)
+
+ifneq ($(strip $(APP_DEPENDENCY_FILES)),)
+-include $(APP_DEPENDENCY_FILES)
+endif
+
+# End

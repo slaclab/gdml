@@ -1,0 +1,85 @@
+# $Id: gdml_link_libs.gmk,v 1.1.1.1 2010/07/13 15:18:49 jeremy Exp $
+
+#
+# This file expects the following variables to be defined.
+#
+# PROJECT_TOP                    - Points to top of build tree.
+#
+# PLATFORM                       - System and compiler description. (e.g. Linux-g++)
+#
+# PLATFORM_LIB_SUFFIX            - The file name suffix for libraries on this platform. (e.g. '.a', '.so')
+#
+# PLATFORM_LIB_PREFIX            - The file name prefix for libraries on this platform. (e.g. 'lib')
+#
+# GDML_USE_SINGLE_LIB            - One of these should be defined.  Defaults to single if not.
+# GDML_USE_STATIC_LIB
+#
+# This file sets the following variables.
+#
+# GDML_STATIC_GRANULAR_LIB_FILES - Absolute pathes of all granular static libraries.
+#
+# GDML_STATIC_SINGLE_LIB_FILE    - Absolute path of single gdml static library.
+#
+# GDML_SHARED_GRANULAR_LIB_FILES - Absolute pathes of granular shared libraries.
+#
+# GDML_SHARED_SINGLE_LIB_FILE    - Absolute path of single gdml shared library.
+#
+# GDML_LDFLAGS_GRANULAR          - Generic LDFLAGS for granular libraries.
+#
+# GDML_LDFLAGS_SINGLE            - Generic LDFLAGS for single library.
+#
+# NOTE: LDFLAGS is not set.  This is deferred to the make target.
+#
+
+ifndef PROJECT_TOP
+	$(error PROJECT_TOP not defined!)
+endif
+
+ifndef PLATFORM
+	$(error PLATFORM not defined!)
+endif
+
+GDML_LIB_DIR := $(PROJECT_TOP)/build/$(PLATFORM)/lib/
+
+# GDML granular libraries in dependency (link) order.
+GDML_GRANULAR_LIBS := G4Writer G4Processor G4Subscribers G4Evaluator Writer Processes Saxana 
+
+# Name of single gdml library.
+GDML_SINGLE_LIB := gdml
+
+# Default to using the single gdml library.
+ifndef GDML_USE_SINGLE_LIB
+  ifndef GDML_USE_GRANULAR_LIB
+    GDML_USE_SINGLE_LIB=1
+  endif
+endif
+
+# Select which library to use from flags.
+ifdef GDML_USE_SINGLE_LIB
+  GDML_LIBS := $(GDML_SINGLE_LIB)
+else
+  ifdef GDML_USE_GRANULAR_LIB
+    GDML_LIBS := $(GDML_GRANULAR_LIBS)
+  endif
+endif
+
+# Shared LDFLAGS.
+GDML_SHARED_LDFLAGS := -L$(GDML_LIB_DIR)
+GDML_SHARED_LDFLAGS += $(addprefix -l,$(GDML_LIBS))
+
+# Static LDFLAGS.
+GDML_STATIC_LIB_FILES := $(addprefix $(GDML_LIB_DIR), $(addsuffix $(PLATFORM_LIB_SUFFIX), $(addprefix $(PLATFORM_LIB_PREFIX), $(GDML_LIBS))))
+GDML_STATIC_LDFLAGS := $(GDML_STATIC_LIB_FILES)
+
+#.PHONY: gdml_lib_info
+
+#gdml_lib_info:
+#	@echo GDML_LIB_DIR=$(GDML_LIB_DIR)
+#	@echo GDML_GRANULAR_LIBS=$(GDML_GRANULAR_LIBS)
+#	@echo GDML_LIBS=$(GDML_LIBS)
+#	@echo GDML_STATIC_LIB_FILES=$(GDML_STATIC_GRANULAR_LIB_FILES)
+#	@echo GDML_USE_SINGLE_LIB=$(GDML_USE_SINGLE_LIB)
+#	@echo GDML_USE_GRANULAR_LIB=$(GDML_USE_GRANULAR_LIB)
+#	@echo GDML_SHARED_LDFLAGS=$(GDML_SHARED_LDFLAGS)
+#	@echo GDML_STATIC_LDFLAGS=$(GDML_STATIC_LDFLAGS)
+
