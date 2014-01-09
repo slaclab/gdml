@@ -6,7 +6,8 @@
 #include <stack>
 #include <stdexcept>
 
-// G4
+// Geant4
+#include "G4SystemOfUnits.hh"
 #include "G4LogicalVolume.hh"
 #include "G4VPVParameterisation.hh"
 #include "G4Element.hh"

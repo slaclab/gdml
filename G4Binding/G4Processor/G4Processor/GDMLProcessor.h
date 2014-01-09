@@ -3,7 +3,7 @@
 #define GDML_PROCESSOR_H 1
 
 // G4 includes
-#include "globals.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4ThreeVector.hh"
 #include "G4RotationMatrix.hh"
 
