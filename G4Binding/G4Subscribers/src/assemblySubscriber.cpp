@@ -167,8 +167,20 @@ class assemblySubscriber : virtual public SAXSubscriber
                 } // end of for(;;)
 
                 // At this point we should have everything ready to create assembly triplet
-                ptrp = new G4AssemblyTriplet( plog, *ppos, prot );
-                anew->AddPlacedVolume( plog, *ppos, prot );
+                //ptrp = new G4AssemblyTriplet( plog, *ppos, prot );
+                //anew->AddPlacedVolume( plog, *ppos, prot );
+
+                // FIX for GDML-12 Jira item.  --JM
+                if ( prot ) {
+                  *prot = prot->inverse(); // inverse() returns by value; hence copy in place OK
+                  ptrp = new G4AssemblyTriplet( plog, *ppos, prot );
+                  anew->AddPlacedVolume( plog, *ppos, prot );
+                }
+                else {
+                  ptrp = new G4AssemblyTriplet( plog, *ppos, 0 );
+                  anew->AddPlacedVolume( plog, *ppos, 0);
+                }
+
                 processor->AddAssemblyVolume( obj->get_name(), anew );
 
               } else { /* Should not happen */ } // end of if-physvol
