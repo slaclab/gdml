@@ -1,6 +1,3 @@
-#ifdef HAVE_G4TWISTEDBOX
-
-//
 #include "Saxana/SAXSubscriber.h"
 #include "Saxana/SAXComponentFactory.h"
 
@@ -75,8 +72,4 @@ public:
 };
 
 DECLARE_SUBSCRIBER_FACTORY(twistedboxSubscriber)
-
-#endif
-
-
 

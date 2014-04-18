@@ -1,7 +1,5 @@
 //
 
-#ifdef HAVE_G4TESSELLATEDSOLID
-
 #include "Saxana/SAXSubscriber.h"
 #include "Saxana/SAXComponentFactory.h"
 
@@ -145,6 +143,3 @@ virtual void Activate( const SAXObject* object ) {
 };
 
 DECLARE_SUBSCRIBER_FACTORY(tessellatedSubscriber)
-
-#endif
-

@@ -1,5 +1,3 @@
-#ifdef HAVE_G4EXTRUDEDSOLID
-
 #include "Saxana/SAXSubscriber.h"
 #include "Saxana/SAXComponentFactory.h"
 
@@ -98,5 +96,3 @@ public:
 };
 
 DECLARE_SUBSCRIBER_FACTORY(xtruSubscriber)
-
-#endif

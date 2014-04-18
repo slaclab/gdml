@@ -30,37 +30,12 @@ void GDMLSubscriberLibLoad() {
     LOAD_COMPONENT(bordersurfaceSubscriber)
     LOAD_COMPONENT(loopSubscriber)
 
-// Following subscribers are only enabled if the Geant4 version supports them.
-
-#ifdef HAVE_G4EXTRUDEDSOLID
     LOAD_COMPONENT(xtruSubscriber)    
-#endif
-
-#ifdef HAVE_G4ELLIPSOID
     LOAD_COMPONENT(ellipsoidSubscriber)
-#endif
-
-#ifdef HAVE_G4TESSELLATEDSOLID
     LOAD_COMPONENT(tessellatedSubscriber)
-#endif
-
-#ifdef HAVE_G4TET
     LOAD_COMPONENT(tetSubscriber)
-#endif
-
-#ifdef HAVE_G4TWISTEDBOX
     LOAD_COMPONENT(twistedboxSubscriber)
-#endif
-
-#ifdef HAVE_G4TWISTEDTUBS
     LOAD_COMPONENT(twistedtubsSubscriber)
-#endif
-
-#ifdef HAVE_G4TWISTEDTRAP
     LOAD_COMPONENT(twistedtrapSubscriber)
-#endif
-
-#ifdef HAVE_G4TWISTEDTRD
     LOAD_COMPONENT(twistedtrdSubscriber)
-#endif
 }

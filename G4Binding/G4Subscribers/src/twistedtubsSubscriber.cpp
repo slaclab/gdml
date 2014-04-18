@@ -1,5 +1,3 @@
-#ifdef HAVE_G4TWISTEDTUBS
-
 //
 #include "Saxana/SAXSubscriber.h"
 #include "Saxana/SAXComponentFactory.h"
@@ -76,7 +74,3 @@ class twistedtubsSubscriber : public SAXSubscriber
 };
 
 DECLARE_SUBSCRIBER_FACTORY(twistedtubsSubscriber)
-
-#endif
-
-  

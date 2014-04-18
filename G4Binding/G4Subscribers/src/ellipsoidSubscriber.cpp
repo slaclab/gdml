@@ -1,5 +1,3 @@
-#ifdef HAVE_G4ELLIPSOID
-
 // --------------------------------------------------------------
 // Comments
 //                G.GUERRIERI - 26.06.2005
@@ -78,5 +76,3 @@ public:
 };
 
 DECLARE_SUBSCRIBER_FACTORY(ellipsoidSubscriber)
-
-#endif  
