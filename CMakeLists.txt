@@ -17,18 +17,8 @@ SET( GDML_VERSION_MAJOR 3 )
 SET( GDML_VERSION_MINOR 1 )
 SET( GDML_VERSION_PATCH 2 )
 
-# find ilcutil
-FIND_PACKAGE( ILCUTIL COMPONENTS ILCSOFT_CMAKE_MODULES REQUIRED )
-
-# load default settings from ILCSOFT_CMAKE_MODULES
-INCLUDE( ilcsoft_default_settings )
-INCLUDE( ExternalProject )
-
 # add path containing CMake macros for this project
 LIST( APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake )
-
-# macro for generating configuration output
-INCLUDE( MacroGeneratePackageConfigFiles )
 
 # find Xerces C++
 FIND_PACKAGE( XERCES REQUIRED )
@@ -87,6 +77,3 @@ ADD_LIBRARY( gdml SHARED ${library_sources} )
 # install library
 SET( GDML_LIB_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/lib )
 INSTALL( TARGETS gdml DESTINATION ${GDML_LIB_INSTALL_DIR} )
-
-# generate package configuration
-GENERATE_PACKAGE_CONFIGURATION_FILES( GDMLConfig.cmake GDMLConfigVersion.cmake GDMLLibDeps.cmake )
