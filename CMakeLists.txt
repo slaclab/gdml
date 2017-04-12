@@ -47,11 +47,11 @@ SET( library_source_dirs
 )
 
 # macro for collating sources
-macro(GDML_COLLATE_APPLICATION_SOURCES source_dest_var source_dir )
+MACRO( GDML_COLLATE_APPLICATION_SOURCES source_dest_var source_dir )
     FILE( GLOB_RECURSE local_source ${source_dir}/src/*.cpp )
     LIST( APPEND ${source_dest_var} ${local_source} )
     INCLUDE_DIRECTORIES( ${source_dir} )    
-endmacro()
+ENDMACRO()
 
 # add application sources and include directories
 FOREACH( src ${library_source_dirs} )
@@ -77,3 +77,13 @@ ADD_LIBRARY( gdml SHARED ${library_sources} )
 # install library
 SET( GDML_LIB_INSTALL_DIR ${CMAKE_INSTALL_PREFIX}/lib )
 INSTALL( TARGETS gdml DESTINATION ${GDML_LIB_INSTALL_DIR} )
+
+# install header files
+FOREACH( src_dir ${library_source_dirs} )
+    GET_FILENAME_COMPONENT( base_src_dir ${src_dir} NAME )
+    FILE( GLOB header_files ${src_dir}/${base_src_dir}/*.h )
+    FOREACH( header_file ${header_files} )
+        GET_FILENAME_COMPONENT( header_file_name ${header_file} NAME )
+        INSTALL( FILES ${src_dir}/${base_src_dir}/${header_file_name} DESTINATION include/${base_src_dir} )
+    ENDFOREACH()
+ENDFOREACH()
