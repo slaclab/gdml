@@ -7,7 +7,7 @@
 #
 
 # minimum cmake version
-CMAKE_MINIMUM_REQUIRED( VERSION 2.8 )
+CMAKE_MINIMUM_REQUIRED( VERSION 3.5 )
 
 # project name
 PROJECT( GDML )
@@ -17,13 +17,17 @@ SET( GDML_VERSION_MAJOR 4 )
 SET( GDML_VERSION_MINOR 0 )
 SET( GDML_VERSION_PATCH 0 )
 
+# require CXX-11
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 # add path containing CMake macros for this project
 LIST( APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake )
 
 # find Xerces C++
-FIND_PACKAGE( XERCES REQUIRED )
-IF( NOT XERCES_FOUND )
-	MESSAGE( FATAL_ERROR "Xerces was not found!  Define XERCES_DIR when calling cmake." )
+FIND_PACKAGE( XercesC REQUIRED )
+IF( NOT XercesC_FOUND )
+	MESSAGE( FATAL_ERROR "XercesC was not found!  Define XercesC_INCLUDE_DIR and XercesC_LIBRARY when calling cmake." )
 ENDIF()
 
 # find Geant4
@@ -66,10 +70,10 @@ ADD_DEFINITIONS( "-Wno-long-long" )
 ADD_DEFINITIONS( ${Geant4_DEFINITIONS} )
 
 # include directories
-INCLUDE_DIRECTORIES( ${XERCES_INCLUDE_DIR} ${Geant4_INCLUDE_DIRS} )
+INCLUDE_DIRECTORIES( ${XercesC_INCLUDE_DIR} ${Geant4_INCLUDE_DIRS} )
 
 # libraries
-LINK_LIBRARIES( ${XERCES_LIBRARY} ${Geant4_LIBRARIES} )
+LINK_LIBRARIES( ${XercesC_LIBRARY} ${Geant4_LIBRARIES} )
 
 # output shared library
 ADD_LIBRARY( gdml SHARED ${library_sources} )
