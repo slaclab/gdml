@@ -1,7 +1,0 @@
-# default compiler flags
-CXXFLAGS                      += -pipe -ansi -pedantic -W -Wall \
-                                 -Wno-non-virtual-dtor -Wno-long-long \
-                                 -Wwrite-strings -Wpointer-arith \
-                                 -Woverloaded-virtual -ftemplate-depth-256 \
-                                 -fmessage-length=0 \
-                                 -O2 -g1

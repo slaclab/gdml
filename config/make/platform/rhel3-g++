@@ -1,1 +1,0 @@
-include $(PROJECT_CONFIG)/platform/linux_g++.gmk
